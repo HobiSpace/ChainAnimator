@@ -8,35 +8,27 @@
 
 import UIKit
 
-typealias LayerAnimationGroupFinishCallBackClosure = (CAAnimation, Bool) -> Void
+/// 构造CAAnimation的闭包，函数式编程，用于保护CAAnimation不被修改，以及可以方便自定义化CAAnimation
 typealias LayerAnimationCreatorClosure = () -> CAAnimation
 
-class LayerAnimateActionGroup: NSObject {
+class LayerAnimateActionGroup: NSObject, AnimationConfigProtocol {
     
-    /// 该group下需要执行的动画Action
-    var animateCreatorArray: [LayerAnimationCreatorClosure] = [LayerAnimationCreatorClosure]()
-    
-    /// 该group的执行时长
     var duration: TimeInterval = 0
     
-    /// 动画重复次数
-    var repeatCount: Int = 1
-    
-    /// 延迟执行时间
     var delay: TimeInterval = 0
     
+    var isAnimating: Bool = false
+    
+    var animationStopCallBack: AnimationStopCallBackClosure?
+    
+    var animationStopCallBackToAnimator: AnimationStopCallBackClosure?
+    
+    var animateCreatorArray: [LayerAnimationCreatorClosure] = [LayerAnimationCreatorClosure]()
+
+    var repeatCount: Int = 1
+
     /// 用于后续扩展不同的key
     var animationKey: String = "animationKey"
-    
-    /// group所有动画完成回调给业务
-    var groupAnimationFinishCallBack: LayerAnimationGroupFinishCallBackClosure?
-    
-    /// group所有动画完成回调给Animator
-    var groupAnimationFinishCallBackToAnimator: LayerAnimationGroupFinishCallBackClosure?
-    
-    
-    /// 该动画组是否正在执行
-    var isGroupAnimating: Bool = false
     
     override init() {
         super.init()
@@ -51,7 +43,7 @@ class LayerAnimateActionGroup: NSObject {
     }
     
     func animationGroupStart(on view: UIView) {
-        isGroupAnimating = true
+        isAnimating = true
         var animationArray = [CAAnimation]()
         for creator in animateCreatorArray {
             let animation = creator()
@@ -67,17 +59,18 @@ class LayerAnimateActionGroup: NSObject {
     }
 }
 
+// MARK: - CAAnimationDelegate
 extension LayerAnimateActionGroup: CAAnimationDelegate {
     func animationDidStart(_ anim: CAAnimation) {
         
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        isGroupAnimating = false
-        groupAnimationFinishCallBack?(anim, flag)
-        groupAnimationFinishCallBackToAnimator?(anim, flag)
-        groupAnimationFinishCallBack = nil
-        groupAnimationFinishCallBackToAnimator = nil
+        isAnimating = false
+        animationStopCallBack?(flag)
+        animationStopCallBackToAnimator?(flag)
+        animationStopCallBack = nil
+        animationStopCallBackToAnimator = nil
         animateCreatorArray.removeAll()
     }
 }

@@ -8,12 +8,12 @@
 
 import UIKit
 
-class LayerAnimator {
+class LayerAnimator: ChainAnimatorProtocol {
     
-    /// 当前在等待需要执行的group数组
+    typealias AnimationItem = LayerAnimateActionGroup
+    
     var animationWaitChain: [LayerAnimateActionGroup]
     
-    /// 正在执行的动画group数组
     var animationExcutingChain: [LayerAnimateActionGroup]
     
     /// view 引用
@@ -23,32 +23,14 @@ class LayerAnimator {
         animationWaitChain = [LayerAnimateActionGroup]()
         animationExcutingChain = [LayerAnimateActionGroup]()
     }
+    
 }
 
-// MARK: - 对外基础功能
+// MARK: - 对外逻辑
 extension LayerAnimator {
     
-    /// 自定义构造Animation，用于完全动画内容自定义
-    ///
-    /// - Parameter animationCreatorClosure: caAnimation作为返回值的构造closure
-    /// - Returns: LayerAnimator
     @discardableResult
-    func customAnimation(_ animationCreatorClosure: @escaping LayerAnimationCreatorClosure) -> LayerAnimator {
-        currentAnimationGroup().addAnimationCreator(animationCreatorClosure)
-        return self
-    }
-    
-    /// 执行动画
-    ///
-    /// - Parameters:
-    ///   - duration: 动画时长
-    ///   - repeatCount: 动画重复次数
-    ///   - delay: 动画执行延迟
-    ///   - finishCallBack: 动画完成回调了
-    /// - Returns: LayerAnimator
-    @discardableResult
-    func animate(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: LayerAnimationGroupFinishCallBackClosure? = nil) -> LayerAnimator {
-        
+    func animate(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
         /*
          把wait group 移到excuting
          */
@@ -58,7 +40,7 @@ extension LayerAnimator {
         firstGroup.duration = duration
         firstGroup.repeatCount = repeatCount
         firstGroup.delay = delay
-        firstGroup.groupAnimationFinishCallBack = finishCallBack
+        firstGroup.animationStopCallBack = finishCallBack
         
         // 从等待队列移除，放到执行队列
         animationWaitChain.removeFirst()
@@ -68,18 +50,7 @@ extension LayerAnimator {
     }
     
     @discardableResult
-    func pause() -> LayerAnimator {
-        guard let view = view else {
-            return self
-        }
-        let pausedTime = view.layer.convertTime(CACurrentMediaTime(), from: nil)
-        view.layer.speed = 0.0
-        view.layer.timeOffset = pausedTime
-        return self
-    }
-    
-    @discardableResult
-    func resume() -> LayerAnimator {
+    func resume() -> Self {
         guard let view = view else {
             return self
         }
@@ -92,18 +63,26 @@ extension LayerAnimator {
         return self
     }
     
-    /// 停止当前动画链所有动画
-    ///
-    /// - Returns: LayerAnimator
     @discardableResult
-    func stop() -> LayerAnimator {
+    func pause() -> Self {
+        guard let view = view else {
+            return self
+        }
+        let pausedTime = view.layer.convertTime(CACurrentMediaTime(), from: nil)
+        view.layer.speed = 0.0
+        view.layer.timeOffset = pausedTime
+        return self
+    }
+    
+    @discardableResult
+    func stop() -> Self {
         guard let view = view else {
             return self
         }
         
         for animationGroup in animationExcutingChain {
             // 正在执行的
-            if animationGroup.isGroupAnimating {
+            if animationGroup.isAnimating {
                 view.layer.removeAnimation(forKey: animationGroup.animationKey)
             }
         }
@@ -113,24 +92,23 @@ extension LayerAnimator {
         
         return self
     }
+    
+    /// 自定义构造Animation，用于完全动画内容自定义
+    ///
+    /// - Parameter animationCreatorClosure: caAnimation作为返回值的构造closure
+    /// - Returns: LayerAnimator
+    @discardableResult
+    func customAnimation(_ animationCreatorClosure: @escaping LayerAnimationCreatorClosure) -> Self {
+        currentAnimationGroup().addAnimationCreator(animationCreatorClosure)
+        return self
+    }
 }
 
 // MARK: - 内部逻辑
 extension LayerAnimator {
-    
-    private func currentAnimationGroup() -> LayerAnimateActionGroup {
-        // 判断有没有group，没有的话创建一个
-        if let group = animationWaitChain.first {
-            return group
-        } else {
-            let group = LayerAnimateActionGroup()
-            animationWaitChain.append(group)
-            return group
-        }
-    }
-    
+
+    /// 继续执行动画链路
     private func animationChainContinue() {
-        
         /*
          1. 判断链路状态是否需要停止
          2. 不需要停止 - 判断是否有正在执行 - 有执行的话return，没有执行的话，执行动画
@@ -140,7 +118,7 @@ extension LayerAnimator {
             return
         }
         
-        firstGroup.groupAnimationFinishCallBackToAnimator = { [weak self] (anim, flag) in
+        firstGroup.animationStopCallBackToAnimator = { [weak self] (flag) in
             // 完成之后 继续执行
             if flag {
                 // 正常结束
@@ -151,10 +129,25 @@ extension LayerAnimator {
             }
         }
         
-        if !firstGroup.isGroupAnimating {
+        if !firstGroup.isAnimating {
             firstGroup.animationGroupStart(on: view)
         }
     }
+    
+    /// 获取当前动画组
+    ///
+    /// - Returns: 动画组
+    private func currentAnimationGroup() -> LayerAnimateActionGroup {
+        // 判断有没有group，没有的话创建一个
+        if let group = animationWaitChain.first {
+            return group
+        } else {
+            let group = LayerAnimateActionGroup()
+            animationWaitChain.append(group)
+            return group
+        }
+    }
+
 }
 
 

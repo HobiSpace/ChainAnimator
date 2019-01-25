@@ -19,9 +19,9 @@ class ViewController: UIViewController {
         tmpView.backgroundColor = UIColor.red
         view.addSubview(tmpView)
         
-//        tmpView2 = UIView.init(frame: CGRect.init(x: 200, y: 400, width: 100, height: 100))
-//        tmpView2.backgroundColor = UIColor.blue
-//        view.addSubview(tmpView2)
+        tmpView2 = UIView.init(frame: CGRect.init(x: 200, y: 400, width: 100, height: 100))
+        tmpView2.backgroundColor = UIColor.blue
+        view.addSubview(tmpView2)
         
         
 //        tmpView3 = ShoppingCarView.init(frame: CGRect.init(x: 200, y: 400, width: 100, height: 100))
@@ -40,6 +40,8 @@ class ViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             self.tmpView.layerAnimator.resume()
         }
+        
+        tmpView2.viewAnimator.originX(to: 30).animate(duration: 1).bounds(to: CGRect.init(x: 0, y: 0, width: 50, height: 50)).animate(duration: 2).expandTop(to: 100).animate(duration: 2)
         
     }
 

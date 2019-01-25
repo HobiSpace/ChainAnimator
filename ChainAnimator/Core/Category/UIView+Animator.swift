@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 
 var layerAnimatorePropertyKey = "layerAnimatorePropertyKey"
+var viewAnimatorePropertyKey = "viewAnimatorePropertyKey"
 
 extension UIView {
     var layerAnimator: LayerAnimator {
@@ -22,6 +23,21 @@ extension UIView {
                 let animation = LayerAnimator()
                 animation.view = self
                 objc_setAssociatedObject(self, &layerAnimatorePropertyKey, animation, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+                return animation
+            }
+        }
+    }
+    
+    var viewAnimator: ViewAnimator {
+        get {
+            assert(Thread.isMainThread, "Animator 必须在主线程调用")
+            
+            if let animation = objc_getAssociatedObject(self, &viewAnimatorePropertyKey) as? ViewAnimator {
+                return animation
+            } else {
+                let animation = ViewAnimator()
+                animation.view = self
+                objc_setAssociatedObject(self, &viewAnimatorePropertyKey, animation, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
                 return animation
             }
         }

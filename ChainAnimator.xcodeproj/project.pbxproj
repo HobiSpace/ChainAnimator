@@ -10,6 +10,9 @@
 		C663CAC621FAE57C00A65B84 /* ShoppingCarFoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAC521FAE57C00A65B84 /* ShoppingCarFoldView.swift */; };
 		C663CAC821FAE58C00A65B84 /* ShoppingCarExpandView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAC721FAE58C00A65B84 /* ShoppingCarExpandView.swift */; };
 		C663CACC21FAEEBD00A65B84 /* ViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CACB21FAEEBD00A65B84 /* ViewAnimator.swift */; };
+		C663CACF21FAF22F00A65B84 /* ChainAnimatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CACE21FAF22F00A65B84 /* ChainAnimatorProtocol.swift */; };
+		C663CAD121FB08A900A65B84 /* ViewAnimateActionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAD021FB08A900A65B84 /* ViewAnimateActionGroup.swift */; };
+		C663CAD321FB0F6D00A65B84 /* ViewAnimator+Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAD221FB0F6D00A65B84 /* ViewAnimator+Effect.swift */; };
 		C6FC529521F8410600DCE8EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FC529421F8410600DCE8EF /* AppDelegate.swift */; };
 		C6FC529721F8410700DCE8EF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FC529621F8410700DCE8EF /* ViewController.swift */; };
 		C6FC529A21F8410700DCE8EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6FC529821F8410700DCE8EF /* Main.storyboard */; };
@@ -45,6 +48,9 @@
 		C663CAC521FAE57C00A65B84 /* ShoppingCarFoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCarFoldView.swift; sourceTree = "<group>"; };
 		C663CAC721FAE58C00A65B84 /* ShoppingCarExpandView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCarExpandView.swift; sourceTree = "<group>"; };
 		C663CACB21FAEEBD00A65B84 /* ViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAnimator.swift; sourceTree = "<group>"; };
+		C663CACE21FAF22F00A65B84 /* ChainAnimatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainAnimatorProtocol.swift; sourceTree = "<group>"; };
+		C663CAD021FB08A900A65B84 /* ViewAnimateActionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAnimateActionGroup.swift; sourceTree = "<group>"; };
+		C663CAD221FB0F6D00A65B84 /* ViewAnimator+Effect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewAnimator+Effect.swift"; sourceTree = "<group>"; };
 		C6FC529121F8410600DCE8EF /* ChainAnimator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChainAnimator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6FC529421F8410600DCE8EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C6FC529621F8410700DCE8EF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,8 +110,26 @@
 			isa = PBXGroup;
 			children = (
 				C663CACB21FAEEBD00A65B84 /* ViewAnimator.swift */,
+				C663CAD021FB08A900A65B84 /* ViewAnimateActionGroup.swift */,
+				C663CAD221FB0F6D00A65B84 /* ViewAnimator+Effect.swift */,
 			);
 			path = UIView;
+			sourceTree = "<group>";
+		};
+		C663CACD21FAF20800A65B84 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				C663CACE21FAF22F00A65B84 /* ChainAnimatorProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		C663CAD421FB133100A65B84 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				C6FC52C721F8471B00DCE8EF /* UIView+Animator.swift */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		C6FC528821F8410600DCE8EF = {
@@ -166,9 +190,10 @@
 		C6FC52C221F8420700DCE8EF /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C663CAD421FB133100A65B84 /* Category */,
+				C663CACD21FAF20800A65B84 /* Protocol */,
 				C663CACA21FAED9E00A65B84 /* UIView */,
 				C663CAC921FAED9000A65B84 /* Layer */,
-				C6FC52C721F8471B00DCE8EF /* UIView+Animator.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -308,12 +333,15 @@
 				C6FC52CF21F9C7D800DCE8EF /* LayerAnimator+Effect.swift in Sources */,
 				C663CAC621FAE57C00A65B84 /* ShoppingCarFoldView.swift in Sources */,
 				C6FC52D121F9CDC600DCE8EF /* ShoppingCarView.swift in Sources */,
+				C663CACF21FAF22F00A65B84 /* ChainAnimatorProtocol.swift in Sources */,
 				C6FC529721F8410700DCE8EF /* ViewController.swift in Sources */,
 				C663CACC21FAEEBD00A65B84 /* ViewAnimator.swift in Sources */,
 				C663CAC821FAE58C00A65B84 /* ShoppingCarExpandView.swift in Sources */,
+				C663CAD121FB08A900A65B84 /* ViewAnimateActionGroup.swift in Sources */,
 				C6FC529521F8410600DCE8EF /* AppDelegate.swift in Sources */,
 				C6FC52CB21F870AF00DCE8EF /* LayerAnimateActionGroup.swift in Sources */,
 				C6FC52C821F8471B00DCE8EF /* UIView+Animator.swift in Sources */,
+				C663CAD321FB0F6D00A65B84 /* ViewAnimator+Effect.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
