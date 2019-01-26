@@ -30,18 +30,20 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tmpView.layerAnimator.expandBottom(to: 200).animate(duration: 10)
+        tmpView.layerAnimator.expandLeft(to: 10).animate(duration: 1).expandRight(to: 200).animate(duration: 1).expandTop(to: 5).animate(duration: 1).expandBottom(to: 300).animate(duration: 1)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.tmpView.layerAnimator.pause()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//            self.tmpView.layerAnimator.pause()
+//        }
+//
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+//            self.tmpView.layerAnimator.resume()
+//        }
         
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-            self.tmpView.layerAnimator.resume()
-        }
-        
-        tmpView2.viewAnimator.originX(to: 30).animate(duration: 1).bounds(to: CGRect.init(x: 0, y: 0, width: 50, height: 50)).animate(duration: 2).expandTop(to: 100).animate(duration: 2)
+        tmpView2.viewAnimator.originX(to: 30).animate(duration: 1).bounds(to: CGRect.init(x: 0, y: 0, width: 50, height: 50)).animate(duration: 1, repeatCount: 1, delay: 0) { (finish) in
+            print("\(self.tmpView2.frame), bounds:\(self.tmpView2.bounds)")
+        }.expandTop(to: 100).animate(duration: 1)
         
     }
 

@@ -69,8 +69,12 @@ extension LayerAnimator: ChainAnimatorPositionProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func origin(to value: CGPoint) -> Self {
-        let deltaPoint = CGPoint.init(x: view!.center.x - view!.frame.minX, y: view!.center.y - view!.frame.minY)
-        return center(to: CGPoint.init(x: value.x + deltaPoint.x, y: value.y + deltaPoint.y))
+        return customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.position.rawValue)
+            let deltaPoint = CGPoint.init(x: self.view!.center.x - self.view!.frame.minX, y: self.view!.center.y - self.view!.frame.minY)
+            animation.values = [self.view!.center, CGPoint.init(x: value.x + deltaPoint.x, y: value.y + deltaPoint.y)]
+            return animation
+        })
     }
 
     /// 移动原点X
@@ -78,8 +82,12 @@ extension LayerAnimator: ChainAnimatorPositionProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func originX(to value: CGFloat) -> Self {
-        let deltaX = view!.center.x - view!.frame.minX
-        return centerX(to: value + deltaX)
+        return customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.positionX.rawValue)
+            let deltaX = self.view!.center.x - self.view!.frame.minX
+            animation.values = [self.view!.center.x, value + deltaX]
+            return animation
+        })
     }
 
     /// 移动原点Y
@@ -87,8 +95,12 @@ extension LayerAnimator: ChainAnimatorPositionProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func originY(to value: CGFloat) -> Self {
-        let deltaY = view!.center.y - view!.frame.minY
-        return centerY(to: value + deltaY)
+        return customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.positionY.rawValue)
+            let deltaY = self.view!.center.y - self.view!.frame.minY
+            animation.values = [self.view!.center.y, value + deltaY]
+            return animation
+        })
     }
 }
 
@@ -128,9 +140,13 @@ extension LayerAnimator: ChainAnimatorBoundsProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func width(to value: CGFloat) -> Self {
-        var tmpBounds = view!.bounds
-        tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: value, height: tmpBounds.height)
-        return bounds(to: tmpBounds)
+        return customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.bounds.rawValue)
+            var tmpBounds = self.view!.bounds
+            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: value, height: tmpBounds.height)
+            animation.values = [self.view!.bounds, tmpBounds]
+            return animation
+        })
     }
 
     /// 修改高度，中心不变，上下拉长
@@ -138,9 +154,13 @@ extension LayerAnimator: ChainAnimatorBoundsProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func height(to value: CGFloat) -> Self {
-        var tmpBounds = view!.bounds
-        tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: tmpBounds.width, height: value)
-        return bounds(to: tmpBounds)
+        return customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.bounds.rawValue)
+            var tmpBounds = self.view!.bounds
+            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: tmpBounds.width, height: value)
+            animation.values = [self.view!.bounds, tmpBounds]
+            return animation
+        })
     }
 
     /// 修改宽度，向左拉长，右边原点不变
@@ -148,9 +168,13 @@ extension LayerAnimator: ChainAnimatorBoundsProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func expandLeft(to value: CGFloat) -> Self {
-        let deltaWidth = value - view!.bounds.width
-        let deltaX = deltaWidth / 2
-        return width(to: value).centerX(to: view!.center.x - deltaX)
+        return width(to: value).customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.positionX.rawValue)
+            let deltaWidth = value - self.view!.bounds.width
+            let deltaX = deltaWidth / 2
+            animation.values = [self.view!.center.x, self.view!.center.x - deltaX]
+            return animation
+        })
     }
 
     /// 修改宽度，向右拉长，左边原点不变
@@ -158,9 +182,13 @@ extension LayerAnimator: ChainAnimatorBoundsProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func expandRight(to value: CGFloat) -> Self {
-        let deltaWidth = value - view!.bounds.width
-        let deltaX = deltaWidth / 2
-        return width(to: value).centerX(to: view!.center.x + deltaX)
+        return width(to: value).customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.positionX.rawValue)
+            let deltaWidth = value - self.view!.bounds.width
+            let deltaX = deltaWidth / 2
+            animation.values = [self.view!.center.x, self.view!.center.x + deltaX]
+            return animation
+        })
     }
 
     /// 修改高度，向上拉长，底部原点不变
@@ -168,20 +196,27 @@ extension LayerAnimator: ChainAnimatorBoundsProtocol {
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
     func expandTop(to value: CGFloat) -> Self {
-        let deltaHeight = value - view!.bounds.height
-        let deltaY = deltaHeight / 2
-        return height(to: value).centerY(to: view!.center.y - deltaY)
-
+         return height(to: value).customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.positionY.rawValue)
+            let deltaHeight = value - self.view!.bounds.height
+            let deltaY = deltaHeight / 2
+            animation.values = [self.view!.center.y, self.view!.center.y - deltaY]
+            return animation
+        })
     }
 
     /// 修改高度，向下拉长，顶部原点不变
     ///
     /// - Parameter value: 目标值
     /// - Returns: LayerAnimator
-    func expandBottom(to value: CGFloat) -> Self {
-        let deltaHeight = value - view!.bounds.height
-        let deltaY = deltaHeight / 2
-        return height(to: value).centerY(to: view!.center.y + deltaY)
+    func expandBottom(to value: CGFloat) -> Self {        
+        return height(to: value).customAnimation({ () -> CAAnimation in
+            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.positionY.rawValue)
+            let deltaHeight = value - self.view!.bounds.height
+            let deltaY = deltaHeight / 2
+            animation.values = [self.view!.center.y, self.view!.center.y + deltaY]
+            return animation
+        })
     }
 }
 
