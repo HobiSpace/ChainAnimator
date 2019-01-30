@@ -13,8 +13,6 @@ typealias LayerAnimationCreatorClosure = () -> CAAnimation
 
 class LayerAnimateActionGroup: NSObject, AnimationConfigProtocol {
     
-    var duration: TimeInterval = 0
-    
     var delay: TimeInterval = 0
     
     var isAnimating: Bool = false
@@ -30,33 +28,16 @@ class LayerAnimateActionGroup: NSObject, AnimationConfigProtocol {
     /// 用于后续扩展不同的key
     var animationKey: String = "animationKey"
     
+    var animationGroup: CAAnimationGroup?
+    
     override init() {
         super.init()
     }
     
     deinit {
-        
+        print("release group")
     }
     
-    func addAnimationCreator(_ creator: @escaping LayerAnimationCreatorClosure) {
-        animateCreatorArray.append(creator)
-    }
-    
-    func animationGroupStart(on view: UIView) {
-        isAnimating = true
-        var animationArray = [CAAnimation]()
-        for creator in animateCreatorArray {
-            let animation = creator()
-            animationArray.append(animation)
-        }
-        let groupAnimation = CAAnimationGroup.init()
-        groupAnimation.animations = animationArray
-        groupAnimation.delegate = self
-        groupAnimation.duration = duration
-        groupAnimation.beginTime = CACurrentMediaTime() + delay
-        groupAnimation.repeatCount = Float(repeatCount)
-        view.layer.add(groupAnimation, forKey: animationKey)
-    }
 }
 
 // MARK: - CAAnimationDelegate
@@ -72,5 +53,78 @@ extension LayerAnimateActionGroup: CAAnimationDelegate {
         animationStopCallBack = nil
         animationStopCallBackToAnimator = nil
         animateCreatorArray.removeAll()
+        animationGroup = nil
     }
+}
+
+
+extension LayerAnimateActionGroup {
+    
+    func addAnimationCreator(_ creator: @escaping LayerAnimationCreatorClosure) {
+        animateCreatorArray.append(creator)
+    }
+    
+    func currentAnimationGroup() -> CAAnimationGroup {
+        guard let animationGroup = self.animationGroup else {
+            let tmpAnimationGroup = CAAnimationGroup.init()
+            self.animationGroup = tmpAnimationGroup
+            return tmpAnimationGroup
+        }
+        return animationGroup
+    }
+    
+    func configPrevChainLink(duration: TimeInterval, delay: TimeInterval, repeatCount: Int) {
+        // 创建一个group 然后把当前所有的creator创建到group中
+        
+        // 然后计算延时以及执行时间，添加到自己的animationgroup中
+        
+        var animationArray = [CAAnimation]()
+        for creator in animateCreatorArray {
+            let animation = creator()
+            animationArray.append(animation)
+        }
+        
+        //  配置TmpGroupAnimation
+        let tmpGroupAnimation = CAAnimationGroup.init()
+        tmpGroupAnimation.animations = animationArray
+        tmpGroupAnimation.fillMode = .forwards
+        tmpGroupAnimation.isRemovedOnCompletion = false
+        
+        let animationGroup = currentAnimationGroup()
+        
+        if var animations = animationGroup.animations, let lastAnimation = animations.last {
+            // 上一个链路存在动画
+            tmpGroupAnimation.beginTime = lastAnimation.beginTime + lastAnimation.duration * Double(lastAnimation.repeatCount) + delay
+            tmpGroupAnimation.duration = duration
+            tmpGroupAnimation.repeatCount = Float(repeatCount)
+            animations.append(tmpGroupAnimation)
+            animationGroup.animations = animations
+        } else {
+            tmpGroupAnimation.beginTime = delay
+            tmpGroupAnimation.duration = duration
+            tmpGroupAnimation.repeatCount = Float(repeatCount)
+            animationGroup.animations = [tmpGroupAnimation]
+        }
+
+        animateCreatorArray.removeAll()
+    }
+    
+    func excuteAnimationGroup(on view: UIView) {
+        
+        // 执行animation group
+        isAnimating = true
+        let animationGroup = currentAnimationGroup()
+        
+        guard let animations = animationGroup.animations, let lastAnimation = animations.last else {
+            return
+        }
+        
+        animationGroup.delegate = self
+        animationGroup.beginTime = CACurrentMediaTime() + delay
+        animationGroup.repeatCount = Float(repeatCount)
+        animationGroup.duration = lastAnimation.beginTime + lastAnimation.duration * Double(lastAnimation.repeatCount)
+        
+        view.layer.add(animationGroup, forKey: animationKey)
+    }
+    
 }

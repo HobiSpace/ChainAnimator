@@ -113,8 +113,8 @@ extension LayerAnimator: ChainAnimatorAlphaProtocol {
     /// - Returns: LayerAnimator
     func opacity(to value: CGFloat) -> Self {
         return customAnimation({ () -> CAAnimation in
-            let animation = CAKeyframeAnimation.init(keyPath: LayerAnimatorKey.opacity.rawValue)
-            animation.values = [self.view!.alpha, value]
+            let animation = CABasicAnimation.init(keyPath: LayerAnimatorKey.opacity.rawValue)
+            animation.toValue = value
             return animation
         })
     }

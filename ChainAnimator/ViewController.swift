@@ -30,7 +30,7 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tmpView.layerAnimator.expandLeft(to: 10).animate(duration: 1).expandRight(to: 200).animate(duration: 1).expandTop(to: 5).animate(duration: 1).expandBottom(to: 300).animate(duration: 1)
+//        tmpView.layerAnimator.expandLeft(to: 10).animate(duration: 1).expandRight(to: 200).animate(duration: 1).expandTop(to: 5).animate(duration: 1).expandBottom(to: 300).animate(duration: 1)
         
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
 //            self.tmpView.layerAnimator.pause()
@@ -41,11 +41,49 @@ class ViewController: UIViewController {
 //            self.tmpView.layerAnimator.resume()
 //        }
         
-        tmpView2.viewAnimator.originX(to: 30).animate(duration: 1).bounds(to: CGRect.init(x: 0, y: 0, width: 50, height: 50)).animate(duration: 1, repeatCount: 1, delay: 0) { (finish) in
-            print("\(self.tmpView2.frame), bounds:\(self.tmpView2.bounds)")
-        }.expandTop(to: 100).animate(duration: 1)
+        tmpView2.layerAnimator.bounds(to: CGRect.init(x: 0, y: 0, width: 50, height: 50)).then(duration: 2, repeatCount: 1, delay: 10).opacity(to: 0).then(duration: 1, repeatCount: 1, delay: 0).opacity(to: 1).then(duration: 2, repeatCount: 1, delay: 0).animate(repeatCount: 3, delay: 0, finishCallBack: nil)
+        
+//        let animation = CAAnimationGroup.init()
+//
+//
+//        let alphaAnimation = CAKeyframeAnimation.init(keyPath: "opacity")
+//        alphaAnimation.values = [1, 0.3]
+//
+//        let animationGroup = CAAnimationGroup.init()
+//        animationGroup.animations = [alphaAnimation]
+//        animationGroup.duration = 1
+//        animationGroup.beginTime = 1
+//        animationGroup.repeatCount = 1
+//        animationGroup.isRemovedOnCompletion = false
+//        animationGroup.fillMode = .forwards
+//
+//        let move = CABasicAnimation.init(keyPath: "opacity")
+//        move.toValue = 1
+//        let animationGroup2 = CAAnimationGroup.init()
+//        animationGroup2.animations = [move]
+//        animationGroup2.duration = 3
+//        animationGroup2.beginTime = 2
+//        animationGroup2.repeatCount = 1
+//        animationGroup2.isRemovedOnCompletion = false
+//        animationGroup2.fillMode = .forwards
+//
+//
+//        animation.animations = [animationGroup, animationGroup2]
+//        animation.duration = 6
+//        animation.beginTime = CACurrentMediaTime()
+//
+//
+//
+//
+//        tmpView2.layer.add(animation, forKey: "123")
         
     }
 
+}
+
+extension ViewController: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        print(self.view.layer.opacity)
+    }
 }
 

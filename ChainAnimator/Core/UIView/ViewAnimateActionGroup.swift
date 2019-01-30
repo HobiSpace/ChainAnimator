@@ -36,19 +36,23 @@ class ViewAnimateActionGroup: NSObject, AnimationConfigProtocol {
     
     func animationGroupStart(on view: UIView) {
         
-        
-        
         UIView.animate(withDuration: duration, delay: delay, options: UIView.AnimationOptions.allowUserInteraction, animations: {
             for creator in self.animateCreatorArray {
                 creator()
             }
         }) { (flag) in
-            self.isAnimating = false
-            self.animationStopCallBack?(flag)
-            self.animationStopCallBackToAnimator?(flag)
-            self.animationStopCallBack = nil
-            self.animationStopCallBackToAnimator = nil
-            self.animateCreatorArray.removeAll()
+            self.repeatCount = self.repeatCount - 1
+            if flag, self.repeatCount > 0 {
+                self.animationGroupStart(on: view)
+            } else {
+                self.isAnimating = false
+                self.animationStopCallBack?(flag)
+                self.animationStopCallBackToAnimator?(flag)
+                self.animationStopCallBack = nil
+                self.animationStopCallBackToAnimator = nil
+                self.animateCreatorArray.removeAll()
+            }
+            
         }
     }
 }

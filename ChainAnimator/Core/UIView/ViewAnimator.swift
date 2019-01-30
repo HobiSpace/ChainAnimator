@@ -9,6 +9,10 @@
 import UIKit
 
 class ViewAnimator: ChainAnimatorProtocol {
+    func then(duration: TimeInterval, repeatCount: Int, delay: TimeInterval) -> Self {
+        return self
+    }
+    
     
     typealias AnimationItem = ViewAnimateActionGroup
     
@@ -24,6 +28,7 @@ class ViewAnimator: ChainAnimatorProtocol {
         animationExcutingChain = [ViewAnimateActionGroup]()
     }
     
+    @discardableResult
     func animate(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
         /*
          把wait group 移到excuting

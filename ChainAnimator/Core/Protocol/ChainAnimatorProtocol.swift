@@ -13,9 +13,6 @@ typealias AnimationStopCallBackClosure = (Bool) -> Void
 
 protocol AnimationConfigProtocol {
     
-    /// 动画执行时长
-    var duration: TimeInterval {get set}
-    
     /// 动画执行延时
     var delay: TimeInterval {get set}
     
@@ -31,8 +28,6 @@ protocol AnimationConfigProtocol {
     /// 动画结束回调到Animatro
     var animationStopCallBackToAnimator: AnimationStopCallBackClosure? {get set}
     
-    func animationGroupStart(on view: UIView)
-    
 }
 
 protocol ChainAnimatorProtocol {
@@ -46,12 +41,20 @@ protocol ChainAnimatorProtocol {
     /// 执行animate之前的所有动画命令
     ///
     /// - Parameters:
-    ///   - duration: 动画时长
-    ///   - repeatCount: 动画重复次数
-    ///   - delay: 延时
+    ///   - repeatCount: 整个链路动画重复次数
+    ///   - delay: 整个链路动画开始延时
     ///   - finishCallBack: 完成回调
     /// - Returns: Self
-    func animate(duration: TimeInterval, repeatCount: Int, delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self
+    func animate(repeatCount: Int, delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self
+    
+    /// 配置从当前then到上一个then的链路动画配置
+    ///
+    /// - Parameters:
+    ///   - duration: 两个then之间动画执行时长
+    ///   - repeatCount: 两个then之间的链路动画执行次数
+    ///   - delay: 该then到上一个then执行的动画延时
+    /// - Returns: Self
+    func then(duration: TimeInterval, repeatCount: Int, delay: TimeInterval) -> Self
     
     func resume() -> Self
     
@@ -59,6 +62,18 @@ protocol ChainAnimatorProtocol {
     
     func stop() -> Self
     
+   
+}
+
+extension ChainAnimatorProtocol {
+    
+    func animate(repeatCount: Int, delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self {
+        return self
+    }
+    
+    func then(duration: TimeInterval, repeatCount: Int, delay: TimeInterval) -> Self {
+        return self
+    }
 }
 
 protocol AnimatorScaleProtocl: ChainAnimatorProtocol {
