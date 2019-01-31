@@ -30,6 +30,11 @@ class LayerAnimator: ChainAnimatorProtocol {
 extension LayerAnimator {
     
     @discardableResult
+    func animate(delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self {
+        return animate(repeatCount: 1, delay: delay, finishCallBack: finishCallBack)
+    }
+    
+    @discardableResult
     func animate(repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
         /*
          把wait group 移到excuting
@@ -40,7 +45,6 @@ extension LayerAnimator {
         //        firstGroup.duration = duration
         firstGroup.repeatCount = repeatCount
         firstGroup.delay = firstGroup.delay + delay
-        //        firstGroup.configPrevChainLink(duration: duration, delay: delay, repeatCount: repeatCount)
         firstGroup.animationStopCallBack = finishCallBack
         
         // 从等待队列移除，放到执行队列

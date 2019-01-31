@@ -9,10 +9,6 @@
 import UIKit
 
 class ViewAnimator: ChainAnimatorProtocol {
-    func then(duration: TimeInterval, repeatCount: Int, delay: TimeInterval) -> Self {
-        return self
-    }
-    
     
     typealias AnimationItem = ViewAnimateActionGroup
     
@@ -28,16 +24,38 @@ class ViewAnimator: ChainAnimatorProtocol {
         animationExcutingChain = [ViewAnimateActionGroup]()
     }
     
+    func resume() -> Self {
+        return self
+    }
+    
+    func pause() -> Self {
+        return self
+    }
+    
+    func stop() -> Self {
+        guard let view = view else {
+            return self
+        }
+        
+        for animationGroup in animationExcutingChain {
+            animationGroup.cleanDelayExcuting(on: view)
+        }
+        
+        animationWaitChain.removeAll()
+        animationExcutingChain.removeAll()
+
+        self.view?.layer.removeAllAnimations()
+        return self
+    }
+    
     @discardableResult
-    func animate(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
+    func animate(delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
         /*
          把wait group 移到excuting
          */
         guard let firstGroup = animationWaitChain.first else {
             return self
         }
-        firstGroup.duration = duration
-        firstGroup.repeatCount = repeatCount
         firstGroup.delay = delay
         firstGroup.animationStopCallBack = finishCallBack
         
@@ -48,15 +66,18 @@ class ViewAnimator: ChainAnimatorProtocol {
         return self
     }
     
-    func resume() -> Self {
-        return self
-    }
-    
-    func pause() -> Self {
-        return self
-    }
-    
-    func stop() -> Self {
+    func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0) -> Self {
+        /*
+         把wait group 移到excuting
+         */
+        guard let firstGroup = animationWaitChain.first else {
+            return self
+        }
+        //        firstGroup.duration = duration
+        //        firstGroup.repeatCount = repeatCount
+        //        firstGroup.delay = firstGroup.delay + delay
+        
+        firstGroup.configPrevChainLink(duration: duration, delay: delay, repeatCount: repeatCount)
         return self
     }
 }
@@ -99,7 +120,7 @@ extension ViewAnimator {
         }
         
         if !firstGroup.isAnimating {
-            firstGroup.animationGroupStart(on: view)
+            firstGroup.excuteAnimationGroup(on: view)
         }
     }
     

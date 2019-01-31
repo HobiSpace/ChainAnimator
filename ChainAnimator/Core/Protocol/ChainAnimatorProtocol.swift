@@ -19,14 +19,27 @@ protocol AnimationConfigProtocol {
     /// 是否正在执行动画
     var isAnimating: Bool {get set}
     
-    /// 动画重复次数
-    var repeatCount: Int {get set}
+//    /// 动画重复次数
+//    var repeatCount: Int {get set}
     
     /// 动画结束回调
     var animationStopCallBack: AnimationStopCallBackClosure? {get set}
     
     /// 动画结束回调到Animatro
     var animationStopCallBackToAnimator: AnimationStopCallBackClosure? {get set}
+    
+    /// 配置then
+    ///
+    /// - Parameters:
+    ///   - duration: then完成的时间
+    ///   - delay: then执行的演示
+    ///   - repeatCount: then重复执行次数
+    func configPrevChainLink(duration: TimeInterval, delay: TimeInterval, repeatCount: Int)
+    
+    /// 执行所有动画命令
+    ///
+    /// - Parameter view: view
+    func excuteAnimationGroup(on view: UIView)
     
 }
 
@@ -45,7 +58,7 @@ protocol ChainAnimatorProtocol {
     ///   - delay: 整个链路动画开始延时
     ///   - finishCallBack: 完成回调
     /// - Returns: Self
-    func animate(repeatCount: Int, delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self
+    func animate(delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self
     
     /// 配置从当前then到上一个then的链路动画配置
     ///
@@ -63,17 +76,6 @@ protocol ChainAnimatorProtocol {
     func stop() -> Self
     
    
-}
-
-extension ChainAnimatorProtocol {
-    
-    func animate(repeatCount: Int, delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self {
-        return self
-    }
-    
-    func then(duration: TimeInterval, repeatCount: Int, delay: TimeInterval) -> Self {
-        return self
-    }
 }
 
 protocol AnimatorScaleProtocl: ChainAnimatorProtocol {

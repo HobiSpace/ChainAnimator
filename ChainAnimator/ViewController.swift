@@ -30,19 +30,12 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        tmpView.layerAnimator.expandLeft(to: 10).animate(duration: 1).expandRight(to: 200).animate(duration: 1).expandTop(to: 5).animate(duration: 1).expandBottom(to: 300).animate(duration: 1)
+        tmpView.viewAnimator.center(to: CGPoint.init(x: 20, y: 20)).width(to: 20).then(duration: 1, repeatCount: 3, delay: 0).expandBottom(to: 300).then(duration: 2).animate(delay: 3, finishCallBack: nil)
         
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//            self.tmpView.layerAnimator.pause()
-//        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            self.tmpView.viewAnimator.stop()
+        }
 //
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-//            self.tmpView.layerAnimator.resume()
-//        }
-        
-        tmpView2.layerAnimator.bounds(to: CGRect.init(x: 0, y: 0, width: 110, height: 10)).then(duration: 3).width(to: 100).then(duration: 3).height(to: 200).then(duration: 2).animate()
-        
 //        let animation = CAAnimationGroup.init()
 //
 //
@@ -75,6 +68,14 @@ class ViewController: UIViewController {
 //
 //        tmpView2.layer.add(animation, forKey: "123")
         
+        
+        
+//        UIView.animate(withDuration: 2, delay: 0, options: .curveLinear, animations: {
+//            UIView.setAnimationRepeatCount(3)
+//            self.tmpView.frame = CGRect.init(x: 0, y: 0, width: 20, height: 20)
+//        }) { (flag) in
+//            print("123")
+//        }
     }
 
 }
