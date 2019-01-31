@@ -41,7 +41,7 @@ class ViewController: UIViewController {
 //            self.tmpView.layerAnimator.resume()
 //        }
         
-        tmpView2.layerAnimator.bounds(to: CGRect.init(x: 0, y: 0, width: 50, height: 50)).then(duration: 2, repeatCount: 1, delay: 10).opacity(to: 0).then(duration: 1, repeatCount: 1, delay: 0).opacity(to: 1).then(duration: 2, repeatCount: 1, delay: 0).animate(repeatCount: 3, delay: 0, finishCallBack: nil)
+        tmpView2.layerAnimator.bounds(to: CGRect.init(x: 0, y: 0, width: 110, height: 10)).then(duration: 3).width(to: 100).then(duration: 3).height(to: 200).then(duration: 2).animate()
         
 //        let animation = CAAnimationGroup.init()
 //
@@ -57,8 +57,8 @@ class ViewController: UIViewController {
 //        animationGroup.isRemovedOnCompletion = false
 //        animationGroup.fillMode = .forwards
 //
-//        let move = CABasicAnimation.init(keyPath: "opacity")
-//        move.toValue = 1
+//        let move = CABasicAnimation.init(keyPath: "bounds.size.width")
+//        move.toValue = 10
 //        let animationGroup2 = CAAnimationGroup.init()
 //        animationGroup2.animations = [move]
 //        animationGroup2.duration = 3
@@ -71,8 +71,6 @@ class ViewController: UIViewController {
 //        animation.animations = [animationGroup, animationGroup2]
 //        animation.duration = 6
 //        animation.beginTime = CACurrentMediaTime()
-//
-//
 //
 //
 //        tmpView2.layer.add(animation, forKey: "123")

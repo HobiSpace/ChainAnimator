@@ -22,8 +22,8 @@ class LayerAnimator: ChainAnimatorProtocol {
     init() {
         animationWaitChain = [LayerAnimateActionGroup]()
         animationExcutingChain = [LayerAnimateActionGroup]()
+        
     }
-    
 }
 
 // MARK: - 对外逻辑
@@ -104,7 +104,7 @@ extension LayerAnimator {
         return self
     }
     
-    func then(duration: TimeInterval, repeatCount: Int, delay: TimeInterval) -> Self {
+    func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0) -> Self {
         /*
          把wait group 移到excuting
          */

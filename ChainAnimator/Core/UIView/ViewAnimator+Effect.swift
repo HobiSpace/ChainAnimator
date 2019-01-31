@@ -57,6 +57,10 @@ extension ViewAnimator: ChainAnimatorAlphaProtocol {
 }
 
 extension ViewAnimator: ChainAnimatorBoundsProtocol {
+    func size(to value: CGSize) -> Self {
+        return self
+    }
+    
 
     func bounds(to value: CGRect) -> Self {
         return customAnimation({

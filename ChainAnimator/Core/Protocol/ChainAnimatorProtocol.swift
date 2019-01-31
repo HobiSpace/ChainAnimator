@@ -136,7 +136,9 @@ protocol ChainAnimatorPositionProtocol: ChainAnimatorProtocol {
     /// - Parameter value: 目标值
     /// - Returns: Self
     func center(to value: CGPoint) -> Self
-    
+}
+
+protocol ChainAnimatorOriginalProtocol: ChainAnimatorProtocol {
     /// 移动原点
     ///
     /// - Parameter value: 目标值
@@ -183,27 +185,33 @@ protocol ChainAnimatorBoundsProtocol: ChainAnimatorProtocol {
     /// - Returns: Self
     func height(to value: CGFloat) -> Self
     
-    /// 修改宽度，向左拉长，右边原点不变
+    /// 修改大小
     ///
     /// - Parameter value: 目标值
     /// - Returns: Self
-    func expandLeft(to value: CGFloat) -> Self
+    func size(to value: CGSize) -> Self
     
-    /// 修改宽度，向右拉长，左边原点不变
-    ///
-    /// - Parameter value: 目标值
-    /// - Returns: Self
-    func expandRight(to value: CGFloat) -> Self
-    
-    /// 修改高度，向上拉长，底部原点不变
-    ///
-    /// - Parameter value: 目标值
-    /// - Returns: Self
-    func expandTop(to value: CGFloat) -> Self
-    
-    /// 修改高度，向下拉长，顶部原点不变
-    ///
-    /// - Parameter value: 目标值
-    /// - Returns: Self
-    func expandBottom(to value: CGFloat) -> Self
+//    /// 修改宽度，向左拉长，右边原点不变
+//    ///
+//    /// - Parameter value: 目标值
+//    /// - Returns: Self
+//    func expandLeft(to value: CGFloat) -> Self
+//
+//    /// 修改宽度，向右拉长，左边原点不变
+//    ///
+//    /// - Parameter value: 目标值
+//    /// - Returns: Self
+//    func expandRight(to value: CGFloat) -> Self
+//
+//    /// 修改高度，向上拉长，底部原点不变
+//    ///
+//    /// - Parameter value: 目标值
+//    /// - Returns: Self
+//    func expandTop(to value: CGFloat) -> Self
+//
+//    /// 修改高度，向下拉长，顶部原点不变
+//    ///
+//    /// - Parameter value: 目标值
+//    /// - Returns: Self
+//    func expandBottom(to value: CGFloat) -> Self
 }
