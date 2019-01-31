@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
+  swift 链式动画轮子，包含UIViewAnimation 和 CAAnimation两种动画
                    DESC
 
   s.homepage     = "https://github.com/HobiSpace/ChainAnimator"
@@ -38,7 +39,7 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "MIT (example)"
+  s.license      = { :type => "MIT", :file => "LICENSE" }
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
