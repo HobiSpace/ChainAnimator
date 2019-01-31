@@ -32,6 +32,7 @@ class ViewAnimator: ChainAnimatorProtocol {
         return self
     }
     
+    @discardableResult
     func stop() -> Self {
         guard let view = view else {
             return self
