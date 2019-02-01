@@ -27,24 +27,6 @@ extension ViewAnimator: ChainAnimatorPositionProtocol {
             self.view!.center = value
         })
     }
-    
-    func origin(to value: CGPoint) -> Self {
-        return customAnimation({
-            self.view!.frame = CGRect.init(origin: value, size: self.view!.bounds.size)
-        })
-    }
-    
-    func originX(to value: CGFloat) -> Self {
-        return customAnimation({
-            self.view!.frame.origin.x = value
-        })
-    }
-    
-    func originY(to value: CGFloat) -> Self {
-        return customAnimation({
-            self.view!.frame.origin.y = value
-        })
-    }
 }
 
 extension ViewAnimator: ChainAnimatorAlphaProtocol {
@@ -53,7 +35,6 @@ extension ViewAnimator: ChainAnimatorAlphaProtocol {
             self.view!.alpha = value
         })
     }
-    
 }
 
 extension ViewAnimator: ChainAnimatorBoundsProtocol {
@@ -72,62 +53,13 @@ extension ViewAnimator: ChainAnimatorBoundsProtocol {
 
     func width(to value: CGFloat) -> Self {
         return customAnimation({
-            var tmpBounds = self.view!.bounds
-            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: value, height: tmpBounds.height)
-            self.view!.bounds = tmpBounds
+            self.view!.bounds.size.width = value
         })
     }
 
     func height(to value: CGFloat) -> Self {
         return customAnimation({
-            var tmpBounds = self.view!.bounds
-            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: tmpBounds.width, height: value)
-            self.view!.bounds = tmpBounds
-        })
-    }
-
-    func expandLeft(to value: CGFloat) -> Self {
-        return customAnimation({
-            let deltaWidth = value - self.view!.bounds.width
-            let deltaX = deltaWidth / 2
-            self.view!.frame.origin.x = self.view!.frame.origin.x - deltaX
-            var tmpBounds = self.view!.bounds
-            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: value, height: tmpBounds.height)
-            self.view!.bounds = tmpBounds
-        })
-    }
-
-    func expandRight(to value: CGFloat) -> Self {
-        return customAnimation({
-            let deltaWidth = value - self.view!.bounds.width
-            let deltaX = deltaWidth / 2
-            self.view!.frame.origin.x = self.view!.frame.origin.x + deltaX
-            var tmpBounds = self.view!.bounds
-            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: value, height: tmpBounds.height)
-            self.view!.bounds = tmpBounds
-        })
-    }
-
-    func expandTop(to value: CGFloat) -> Self {
-        return customAnimation({
-            let deltaHeight = value - self.view!.bounds.height
-            let deltaY = deltaHeight / 2
-            self.view!.frame.origin.y = self.view!.frame.origin.y - deltaY
-            var tmpBounds = self.view!.bounds
-            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: tmpBounds.width, height: value)
-            self.view!.bounds = tmpBounds
-        })
-    }
-
-    func expandBottom(to value: CGFloat) -> Self {
-        return customAnimation({
-            let deltaHeight = value - self.view!.bounds.height
-            let deltaY = deltaHeight / 2
-            self.view!.frame.origin.y = self.view!.frame.origin.y + deltaY
-            var tmpBounds = self.view!.bounds
-            tmpBounds = CGRect.init(x: tmpBounds.minX, y: tmpBounds.minY, width: tmpBounds.width, height: value)
-            self.view!.bounds = tmpBounds
+            self.view!.bounds.size.height = value
         })
     }
 }
-
