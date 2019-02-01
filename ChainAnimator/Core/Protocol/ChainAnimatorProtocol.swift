@@ -100,6 +100,15 @@ protocol AnimatorScaleProtocl: ChainAnimatorProtocol {
 
 }
 
+protocol ChainAnimatorAnchorPointProtocol: ChainAnimatorProtocol {
+    
+    /// 改变锚点
+    ///
+    /// - Parameter value: 锚点值
+    /// - Returns: Self
+    func anchorPoint(to value: CGPoint) -> Self
+}
+
 protocol ChainAnimatorRotationProtocol: ChainAnimatorProtocol {
     /// 沿X轴旋转
     ///

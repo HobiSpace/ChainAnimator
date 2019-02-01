@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C663CAC621FAE57C00A65B84 /* ShoppingCarFoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAC521FAE57C00A65B84 /* ShoppingCarFoldView.swift */; };
-		C663CAC821FAE58C00A65B84 /* ShoppingCarExpandView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAC721FAE58C00A65B84 /* ShoppingCarExpandView.swift */; };
 		C663CACC21FAEEBD00A65B84 /* ViewAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CACB21FAEEBD00A65B84 /* ViewAnimator.swift */; };
 		C663CACF21FAF22F00A65B84 /* ChainAnimatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CACE21FAF22F00A65B84 /* ChainAnimatorProtocol.swift */; };
 		C663CAD121FB08A900A65B84 /* ViewAnimateActionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C663CAD021FB08A900A65B84 /* ViewAnimateActionGroup.swift */; };
@@ -24,7 +22,6 @@
 		C6FC52C821F8471B00DCE8EF /* UIView+Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FC52C721F8471B00DCE8EF /* UIView+Animator.swift */; };
 		C6FC52CB21F870AF00DCE8EF /* LayerAnimateActionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FC52CA21F870AF00DCE8EF /* LayerAnimateActionGroup.swift */; };
 		C6FC52CF21F9C7D800DCE8EF /* LayerAnimator+Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FC52CE21F9C7D800DCE8EF /* LayerAnimator+Effect.swift */; };
-		C6FC52D121F9CDC600DCE8EF /* ShoppingCarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FC52D021F9CDC600DCE8EF /* ShoppingCarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,8 +42,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C663CAC521FAE57C00A65B84 /* ShoppingCarFoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCarFoldView.swift; sourceTree = "<group>"; };
-		C663CAC721FAE58C00A65B84 /* ShoppingCarExpandView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCarExpandView.swift; sourceTree = "<group>"; };
 		C663CACB21FAEEBD00A65B84 /* ViewAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAnimator.swift; sourceTree = "<group>"; };
 		C663CACE21FAF22F00A65B84 /* ChainAnimatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainAnimatorProtocol.swift; sourceTree = "<group>"; };
 		C663CAD021FB08A900A65B84 /* ViewAnimateActionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAnimateActionGroup.swift; sourceTree = "<group>"; };
@@ -68,7 +63,6 @@
 		C6FC52C721F8471B00DCE8EF /* UIView+Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animator.swift"; sourceTree = "<group>"; };
 		C6FC52CA21F870AF00DCE8EF /* LayerAnimateActionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerAnimateActionGroup.swift; sourceTree = "<group>"; };
 		C6FC52CE21F9C7D800DCE8EF /* LayerAnimator+Effect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LayerAnimator+Effect.swift"; sourceTree = "<group>"; };
-		C6FC52D021F9CDC600DCE8EF /* ShoppingCarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,9 +156,6 @@
 				C6FC529B21F8410800DCE8EF /* Assets.xcassets */,
 				C6FC529D21F8410800DCE8EF /* LaunchScreen.storyboard */,
 				C6FC52A021F8410800DCE8EF /* Info.plist */,
-				C6FC52D021F9CDC600DCE8EF /* ShoppingCarView.swift */,
-				C663CAC521FAE57C00A65B84 /* ShoppingCarFoldView.swift */,
-				C663CAC721FAE58C00A65B84 /* ShoppingCarExpandView.swift */,
 			);
 			path = ChainAnimator;
 			sourceTree = "<group>";
@@ -331,12 +322,9 @@
 			files = (
 				C6FC52C421F8422300DCE8EF /* LayerAnimator.swift in Sources */,
 				C6FC52CF21F9C7D800DCE8EF /* LayerAnimator+Effect.swift in Sources */,
-				C663CAC621FAE57C00A65B84 /* ShoppingCarFoldView.swift in Sources */,
-				C6FC52D121F9CDC600DCE8EF /* ShoppingCarView.swift in Sources */,
 				C663CACF21FAF22F00A65B84 /* ChainAnimatorProtocol.swift in Sources */,
 				C6FC529721F8410700DCE8EF /* ViewController.swift in Sources */,
 				C663CACC21FAEEBD00A65B84 /* ViewAnimator.swift in Sources */,
-				C663CAC821FAE58C00A65B84 /* ShoppingCarExpandView.swift in Sources */,
 				C663CAD121FB08A900A65B84 /* ViewAnimateActionGroup.swift in Sources */,
 				C6FC529521F8410600DCE8EF /* AppDelegate.swift in Sources */,
 				C6FC52CB21F870AF00DCE8EF /* LayerAnimateActionGroup.swift in Sources */,

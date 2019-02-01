@@ -12,7 +12,6 @@ class ViewController: UIViewController {
 
     var tmpView: UIView!
     var tmpView2: UIView!
-    var tmpView3: ShoppingCarView!
     override func viewDidLoad() {
         super.viewDidLoad()
         tmpView = UIView.init(frame: CGRect.init(x: 10, y: 200, width: 30, height: 30))
@@ -23,20 +22,17 @@ class ViewController: UIViewController {
         tmpView2.backgroundColor = UIColor.blue
         view.addSubview(tmpView2)
         
-        
-//        tmpView3 = ShoppingCarView.init(frame: CGRect.init(x: 200, y: 400, width: 100, height: 100))
-//        view.addSubview(tmpView3)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 //        tmpView.viewAnimator.center(to: CGPoint.init(x: 20, y: 20)).width(to: 20).then(duration: 1, repeatCount: 3, delay: 0).expandBottom(to: 300).then(duration: 2).animate(delay: 3, finishCallBack: nil)
         
-        tmpView.layerAnimator.rotationZ(to: .pi).centerX(to: 100).then(duration: 3).width(to: 100).centerX(to: 135).then(duration: 2).animate()
+        tmpView.layerAnimator.anchorPoint(to: CGPoint.init(x: 0, y: 0)).width(to: 50).then(duration: 2).rotationZ(to: .pi).then(duration: 10).animate()
         
-        tmpView.viewAnimator.centerX(to: 300).width(to: 100).then(duration: 2).opacity(to: 0.3).height(to: 300).then(duration: 2, repeatCount: 3, delay: 0).animate(delay: 2) { (flag) in
-            print(self.tmpView.frame)
-        }
+//        tmpView.viewAnimator.centerX(to: 300).width(to: 100).then(duration: 2).opacity(to: 0.3).height(to: 300).then(duration: 2, repeatCount: 3, delay: 0).animate(delay: 2) { (flag) in
+//            print(self.tmpView.frame)
+//        }
 //
 //        let animation = CAAnimationGroup.init()
 //

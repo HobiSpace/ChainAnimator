@@ -26,6 +26,7 @@ enum LayerAnimatorKey: String {
     case rotationX      = "transform.rotation.x"
     case rotationY      = "transform.rotation.y"
     case rotationZ      = "transform.rotation.z"
+    case anchorPoint    = "anchorPoint"
 }
 
 // MARK: - Position
@@ -154,6 +155,17 @@ extension LayerAnimator: ChainAnimatorRotationProtocol {
     func rotationZ(to value: CGFloat) -> Self {
         return customAnimation({ () -> CAAnimation in
             let animation = CABasicAnimation.init(keyPath: LayerAnimatorKey.rotationZ.rawValue)
+            animation.toValue = value
+            return animation
+        })
+    }
+    
+}
+
+extension LayerAnimator: ChainAnimatorAnchorPointProtocol {
+    func anchorPoint(to value: CGPoint) -> Self {
+        return customAnimation({ () -> CAAnimation in
+            let animation = CABasicAnimation.init(keyPath: LayerAnimatorKey.anchorPoint.rawValue)
             animation.toValue = value
             return animation
         })
