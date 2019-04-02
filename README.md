@@ -7,11 +7,11 @@ LayerAnimator 不会去改变view的任何属性，在动画结束后会移除�
 
 ViewAnimator 会直接改变View的属性，动画结束后不会复原，且支持点击
 
-## 安装
-
-```
- pod 'ChainAnimator', :git => 'git@github.com:HobiSpace/ChainAnimator.git', :branch => 'master'
-```
+<!--## 安装-->
+<!---->
+<!--```-->
+<!-- pod 'ChainAnimator', :git => 'git@github.com:HobiSpace/ChainAnimator.git', :branch => 'master'-->
+<!--```-->
 
 ## 使用
 
