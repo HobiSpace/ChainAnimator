@@ -8,49 +8,49 @@
 
 import UIKit
 
-class ViewAnimator: ChainAnimatorProtocol {
+public class ViewAnimator: ChainAnimatorProtocol {
     
-    typealias AnimationItem = ViewAnimateActionGroup
+    public typealias AnimationItem = ViewAnimateActionGroup
     
-    var animationWaitChain: [ViewAnimateActionGroup]
+    public var animationWaitChain: [ViewAnimateActionGroup]
     
-    var animationExcutingChain: [ViewAnimateActionGroup]
+    public var animationExcutingChain: [ViewAnimateActionGroup]
     
     /// view 引用
     weak var view: UIView?
-    
+
     init() {
         animationWaitChain = [ViewAnimateActionGroup]()
         animationExcutingChain = [ViewAnimateActionGroup]()
     }
-    
-    func resume() -> Self {
+
+    public func resume() -> Self {
         return self
     }
-    
-    func pause() -> Self {
+
+    public func pause() -> Self {
         return self
     }
-    
+
     @discardableResult
-    func stop() -> Self {
+    public func stop() -> Self {
         guard let view = view else {
             return self
         }
-        
+
         for animationGroup in animationExcutingChain {
             animationGroup.cleanDelayExcuting(on: view)
         }
-        
+
         animationWaitChain.removeAll()
         animationExcutingChain.removeAll()
 
         self.view?.layer.removeAllAnimations()
         return self
     }
-    
+
     @discardableResult
-    func animate(delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
+    public func animate(delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
         /*
          把wait group 移到excuting
          */
@@ -59,15 +59,19 @@ class ViewAnimator: ChainAnimatorProtocol {
         }
         firstGroup.delay = delay
         firstGroup.animationStopCallBack = finishCallBack
-        
+
         // 从等待队列移除，放到执行队列
         animationWaitChain.removeFirst()
         animationExcutingChain.append(firstGroup)
         animationChainContinue()
         return self
     }
+
+    public func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0) -> Self {
+        return then(duration: duration, repeatCount: repeatCount, delay: delay, option: .curveEaseInOut)
+    }
     
-    func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0) -> Self {
+    public func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0, option: UIView.AnimationOptions) -> Self {
         /*
          把wait group 移到excuting
          */
@@ -78,7 +82,7 @@ class ViewAnimator: ChainAnimatorProtocol {
         //        firstGroup.repeatCount = repeatCount
         //        firstGroup.delay = firstGroup.delay + delay
         
-        firstGroup.configPrevChainLink(duration: duration, delay: delay, repeatCount: repeatCount)
+        firstGroup.configPrevChainLink(duration: duration, delay: delay, repeatCount: repeatCount, option: option)
         return self
     }
 }
@@ -104,27 +108,29 @@ extension ViewAnimator {
          1. 判断链路状态是否需要停止
          2. 不需要停止 - 判断是否有正在执行 - 有执行的话return，没有执行的话，执行动画
          */
-        
+
         guard let view = self.view, let firstGroup = animationExcutingChain.first else {
             return
         }
-        
+
         firstGroup.animationStopCallBackToAnimator = { [weak self] (flag) in
             // 完成之后 继续执行
             if flag {
                 // 正常结束
-                self?.animationExcutingChain.removeFirst()
+                if let _ = self?.animationExcutingChain.first {
+                    self?.animationExcutingChain.removeFirst()
+                }
                 self?.animationChainContinue()
             } else {
                 // 链路停止了
             }
         }
-        
+
         if !firstGroup.isAnimating {
             firstGroup.excuteAnimationGroup(on: view)
         }
     }
-    
+
     /// 获取当前动画组
     ///
     /// - Returns: 动画组

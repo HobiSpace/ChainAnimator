@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-typealias AnimationStopCallBackClosure = (Bool) -> Void
+public typealias AnimationStopCallBackClosure = (Bool) -> Void
 
-protocol AnimationConfigProtocol {
+public protocol AnimationConfigProtocol {
     
     /// 动画执行延时
     var delay: TimeInterval {get set}
@@ -43,7 +43,7 @@ protocol AnimationConfigProtocol {
     
 }
 
-protocol ChainAnimatorProtocol {
+public protocol ChainAnimatorProtocol {
     associatedtype AnimationItem: AnimationConfigProtocol
     /// 当前在等待需要执行的动画数组
     var animationWaitChain: [AnimationItem] {get set}
@@ -78,7 +78,7 @@ protocol ChainAnimatorProtocol {
    
 }
 
-protocol AnimatorScaleProtocl: ChainAnimatorProtocol {
+public protocol AnimatorScaleProtocl: ChainAnimatorProtocol {
     
     /// 修改整体缩放比例
     ///
@@ -100,7 +100,7 @@ protocol AnimatorScaleProtocl: ChainAnimatorProtocol {
 
 }
 
-protocol ChainAnimatorAnchorPointProtocol: ChainAnimatorProtocol {
+public protocol ChainAnimatorAnchorPointProtocol: ChainAnimatorProtocol {
     
     /// 改变锚点
     ///
@@ -109,7 +109,7 @@ protocol ChainAnimatorAnchorPointProtocol: ChainAnimatorProtocol {
     func anchorPoint(to value: CGPoint) -> Self
 }
 
-protocol ChainAnimatorRotationProtocol: ChainAnimatorProtocol {
+public protocol ChainAnimatorRotationProtocol: ChainAnimatorProtocol {
     /// 沿X轴旋转
     ///
     /// - Parameter value: 目标值（.PI）
@@ -129,7 +129,7 @@ protocol ChainAnimatorRotationProtocol: ChainAnimatorProtocol {
     func rotationZ(to value: CGFloat) -> Self
 }
 
-protocol ChainAnimatorPositionProtocol: ChainAnimatorProtocol {
+public protocol ChainAnimatorPositionProtocol: ChainAnimatorProtocol {
     /// 移动中心点X
     ///
     /// - Parameter value: 目标值
@@ -149,7 +149,7 @@ protocol ChainAnimatorPositionProtocol: ChainAnimatorProtocol {
     func center(to value: CGPoint) -> Self
 }
 
-protocol ChainAnimatorOriginalProtocol: ChainAnimatorProtocol {
+public protocol ChainAnimatorOriginalProtocol: ChainAnimatorProtocol {
     /// 移动原点
     ///
     /// - Parameter value: 目标值
@@ -169,7 +169,7 @@ protocol ChainAnimatorOriginalProtocol: ChainAnimatorProtocol {
     func originY(to value: CGFloat) -> Self
 }
 
-protocol ChainAnimatorAlphaProtocol: ChainAnimatorProtocol {
+public protocol ChainAnimatorAlphaProtocol: ChainAnimatorProtocol {
     /// 改变透明度
     ///
     /// - Parameter value: 目标值
@@ -177,7 +177,7 @@ protocol ChainAnimatorAlphaProtocol: ChainAnimatorProtocol {
     func opacity(to value: CGFloat) -> Self
 }
 
-protocol ChainAnimatorBoundsProtocol: ChainAnimatorProtocol {
+public protocol ChainAnimatorBoundsProtocol: ChainAnimatorProtocol {
     /// 修改bounds，中心不变
     ///
     /// - Parameter value: 目标值

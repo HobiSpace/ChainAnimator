@@ -8,34 +8,34 @@
 
 import UIKit
 
-class LayerAnimator: ChainAnimatorProtocol {
+public class LayerAnimator: ChainAnimatorProtocol {
     
-    typealias AnimationItem = LayerAnimateActionGroup
+    public typealias AnimationItem = LayerAnimateActionGroup
     
-    var animationWaitChain: [LayerAnimateActionGroup]
+    public var animationWaitChain: [LayerAnimateActionGroup]
     
-    var animationExcutingChain: [LayerAnimateActionGroup]
+    public var animationExcutingChain: [LayerAnimateActionGroup]
     
     /// view 引用
     weak var view: UIView?
-    
+
     init() {
         animationWaitChain = [LayerAnimateActionGroup]()
         animationExcutingChain = [LayerAnimateActionGroup]()
-        
+
     }
 }
 
 // MARK: - 对外逻辑
 extension LayerAnimator {
-    
+
     @discardableResult
-    func animate(delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self {
+    public func animate(delay: TimeInterval, finishCallBack: AnimationStopCallBackClosure?) -> Self {
         return animate(repeatCount: 1, delay: delay, finishCallBack: finishCallBack)
     }
-    
+
     @discardableResult
-    func animate(repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
+    public func animate(repeatCount: Int = 1, delay: TimeInterval = 0, finishCallBack: AnimationStopCallBackClosure? = nil) -> Self {
         /*
          把wait group 移到excuting
          */
@@ -46,16 +46,16 @@ extension LayerAnimator {
         firstGroup.repeatCount = repeatCount
         firstGroup.delay = firstGroup.delay + delay
         firstGroup.animationStopCallBack = finishCallBack
-        
+
         // 从等待队列移除，放到执行队列
         animationWaitChain.removeFirst()
         animationExcutingChain.append(firstGroup)
         animationChainContinue()
         return self
     }
-    
+
     @discardableResult
-    func resume() -> Self {
+    public func resume() -> Self {
         guard let view = view else {
             return self
         }
@@ -67,9 +67,9 @@ extension LayerAnimator {
         view.layer.beginTime = timeSincePause
         return self
     }
-    
+
     @discardableResult
-    func pause() -> Self {
+    public func pause() -> Self {
         guard let view = view else {
             return self
         }
@@ -78,37 +78,37 @@ extension LayerAnimator {
         view.layer.timeOffset = pausedTime
         return self
     }
-    
+
     @discardableResult
-    func stop() -> Self {
+    public func stop() -> Self {
         guard let view = view else {
             return self
         }
-        
+
         for animationGroup in animationExcutingChain {
             // 正在执行的
             if animationGroup.isAnimating {
                 view.layer.removeAnimation(forKey: animationGroup.animationKey)
             }
         }
-        
+
         animationWaitChain.removeAll()
         animationExcutingChain.removeAll()
-        
+
         return self
     }
-    
+
     /// 自定义构造Animation，用于完全动画内容自定义
     ///
     /// - Parameter animationCreatorClosure: caAnimation作为返回值的构造closure
     /// - Returns: LayerAnimator
     @discardableResult
-    func customAnimation(_ animationCreatorClosure: @escaping LayerAnimationCreatorClosure) -> Self {
+    public func customAnimation(_ animationCreatorClosure: @escaping LayerAnimationCreatorClosure) -> Self {
         currentAnimationGroup().addAnimationCreator(animationCreatorClosure)
         return self
     }
-    
-    func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0) -> Self {
+
+    public func then(duration: TimeInterval, repeatCount: Int = 1, delay: TimeInterval = 0) -> Self {
         /*
          把wait group 移到excuting
          */
@@ -118,7 +118,7 @@ extension LayerAnimator {
         //        firstGroup.duration = duration
         //        firstGroup.repeatCount = repeatCount
         //        firstGroup.delay = firstGroup.delay + delay
-        
+
         firstGroup.configPrevChainLink(duration: duration, delay: delay, repeatCount: repeatCount)
         return self
     }
@@ -133,27 +133,29 @@ extension LayerAnimator {
          1. 判断链路状态是否需要停止
          2. 不需要停止 - 判断是否有正在执行 - 有执行的话return，没有执行的话，执行动画
          */
-        
+
         guard let view = self.view, let firstGroup = animationExcutingChain.first else {
             return
         }
-        
+
         firstGroup.animationStopCallBackToAnimator = { [weak self] (flag) in
             // 完成之后 继续执行
             if flag {
                 // 正常结束
-                self?.animationExcutingChain.removeFirst()
+                if let _ = self?.animationExcutingChain.first {
+                    self?.animationExcutingChain.removeFirst()
+                }
                 self?.animationChainContinue()
             } else {
                 // 链路停止了
             }
         }
-        
+
         if !firstGroup.isAnimating {
             firstGroup.excuteAnimationGroup(on: view)
         }
     }
-    
+
     /// 获取当前动画组
     ///
     /// - Returns: 动画组

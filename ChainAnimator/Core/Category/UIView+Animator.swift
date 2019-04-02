@@ -13,7 +13,7 @@ var layerAnimatorePropertyKey = "layerAnimatorePropertyKey"
 var viewAnimatorePropertyKey = "viewAnimatorePropertyKey"
 
 extension UIView {
-    var layerAnimator: LayerAnimator {
+    public var layerAnimator: LayerAnimator {
         get {
             assert(Thread.isMainThread, "Animator 必须在主线程调用")
             
@@ -28,7 +28,7 @@ extension UIView {
         }
     }
     
-    var viewAnimator: ViewAnimator {
+    public var viewAnimator: ViewAnimator {
         get {
             assert(Thread.isMainThread, "Animator 必须在主线程调用")
             

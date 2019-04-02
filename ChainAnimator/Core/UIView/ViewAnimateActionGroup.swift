@@ -10,72 +10,76 @@ import UIKit
 
 typealias ViewAnimationCreatorClosure = () -> Void
 
-class ViewAnimateActionGroup: NSObject, AnimationConfigProtocol {
+public class ViewAnimateActionGroup: NSObject, AnimationConfigProtocol {
     
-    var delay: TimeInterval = 0
-    
-    var isAnimating: Bool = false
-    
-    var animationStopCallBack: AnimationStopCallBackClosure?
-    
-    var animationStopCallBackToAnimator: AnimationStopCallBackClosure?
-    
+    public var delay: TimeInterval = 0
+
+    public var isAnimating: Bool = false
+
+    public var animationStopCallBack: AnimationStopCallBackClosure?
+
+    public var animationStopCallBackToAnimator: AnimationStopCallBackClosure?
+
     var animateCreatorArray: [ViewAnimationCreatorClosure] = [ViewAnimationCreatorClosure]()
-    
+
     private var animateIdx: Int = 0
-    
+
     /// 操作 时长 delay 重复次数
-    var animateActionArray: [([ViewAnimationCreatorClosure], TimeInterval, TimeInterval, Int)] = [([ViewAnimationCreatorClosure], TimeInterval, TimeInterval, Int)]()
-    
+    var animateActionArray: [([ViewAnimationCreatorClosure], TimeInterval, TimeInterval, Int, UIView.AnimationOptions)] = [([ViewAnimationCreatorClosure], TimeInterval, TimeInterval, Int, UIView.AnimationOptions)]()
+
     override init() {
         super.init()
     }
-    
+
     deinit {
-        print("release view")
+        
     }
-    
+
     func addAnimationCreator(_ creator: @escaping ViewAnimationCreatorClosure) {
         animateCreatorArray.append(creator)
     }
+
+    public func configPrevChainLink(duration: TimeInterval, delay: TimeInterval, repeatCount: Int) {
+        configPrevChainLink(duration: duration, delay: delay, repeatCount: repeatCount, option: .curveEaseInOut)
+    }
     
-    func configPrevChainLink(duration: TimeInterval, delay: TimeInterval, repeatCount: Int) {
-        
+    public func configPrevChainLink(duration: TimeInterval, delay: TimeInterval, repeatCount: Int, option: UIView.AnimationOptions) {
         // 保存操作到队列中
         // 拷贝一次数组
         let creatorArray = animateCreatorArray
-        animateActionArray.append((creatorArray, duration, delay, repeatCount))
+        animateActionArray.append((creatorArray, duration, delay, repeatCount, option))
         animateCreatorArray.removeAll()
     }
-    
+
     @objc func innerExcuteAnimationGroup(on view: UIView) {
-        
+
         guard animateIdx < animateActionArray.count else {
             return
         }
-        
+
         let animateConfigTuple = animateActionArray[animateIdx]
         let actionArray = animateConfigTuple.0
         let duration = animateConfigTuple.1
         let delay = animateConfigTuple.2
         let repeatCount = animateConfigTuple.3
-        
-        UIView.animate(withDuration: duration, delay: delay, options: .allowUserInteraction, animations: {
+        let option = animateConfigTuple.4
+
+        UIView.animate(withDuration: duration, delay: delay, options: option, animations: {
             UIView.setAnimationRepeatCount(Float(repeatCount))
             for action in actionArray {
                 action()
             }
         }) { (flag) in
-            
+
             self.animateIdx = self.animateIdx + 1
-            
+
             if flag {
                 // 完成了
                 /*
                  继续播放下一个动画
                  如果idx >= count 说明已经播放完了 回调到外面
                  */
-                
+
                 if self.animateIdx >= self.animateActionArray.count {
                     // 全部animate之前的动画已经播放完成
                     self.finish(flag)
@@ -89,7 +93,7 @@ class ViewAnimateActionGroup: NSObject, AnimationConfigProtocol {
             }
         }
     }
-    
+
     private func finish(_ flag: Bool) {
         // 停止了
         isAnimating = false
@@ -100,12 +104,12 @@ class ViewAnimateActionGroup: NSObject, AnimationConfigProtocol {
         animateCreatorArray.removeAll()
         animateActionArray.removeAll()
     }
-    
-    func excuteAnimationGroup(on view: UIView) {
+
+    public func excuteAnimationGroup(on view: UIView) {
         self.cleanDelayExcuting(on: view)
         self.perform(#selector(innerExcuteAnimationGroup(on:)), with: view, afterDelay: delay)
     }
-    
+
     func cleanDelayExcuting(on view: UIView) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(innerExcuteAnimationGroup(on:)), object: view)
     }
